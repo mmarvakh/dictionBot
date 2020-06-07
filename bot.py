@@ -49,12 +49,12 @@ async def process_facts_command(message: types.Message):
 
 
 @dp.callback_query_handler()
-async def process_callback_first_plan(callback_query: types.CallbackQuery):
+async def process_callback_plans(callback_query: types.CallbackQuery):
     for plan in buttons_for_plans:
         if callback_query.data == plan:
             msg = text(bold("Был выбран план:\n"),
                     f"{buttons_for_plans[plan]}\n",
-                    bold("Первый этап выполнен!\n"),
+                    bold("Первый этап пройден!\n"),
                     "Давайте приступим ко второму - выбор дней занятий. Вы можете выбрать дни недели, по которым будут высылаться упражнения",
                     sep="\n")
             await bot.answer_callback_query(callback_query.id)
