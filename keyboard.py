@@ -22,3 +22,16 @@ plans = {
 
 # Adding inline buttons of plans after message
 inline_buttons_of_plans = InlineKeyboardMarkup().insert(first_plan).insert(second_plan).insert(third_plan)
+
+# Buttons for choosing day of the week
+monday = InlineKeyboardButton("Понедельник", callback_data="monday")
+tuesday = InlineKeyboardButton("Вторник", callback_data="tuesday")
+wednesday = InlineKeyboardButton("Среда", callback_data="wednesday")
+thursday = InlineKeyboardButton("Четверг", callback_data="thursday")
+friday = InlineKeyboardButton("Пятница", callback_data="friday")
+saturday = InlineKeyboardButton("Суббота", callback_data="saturday")
+sunday = InlineKeyboardButton("Воскресенье", callback_data="sunday")
+stop_choosing = InlineKeyboardButton("Закончить выбор", callback_data="stop")
+
+# Adding inline buttons of days of the week after choosing
+inline_buttons_of_days = InlineKeyboardMarkup().insert(monday).insert(tuesday).insert(wednesday).insert(thursday).insert(friday).insert(saturday).insert(sunday).row(stop_choosing)
