@@ -9,9 +9,9 @@ reply_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=Tru
 reply_keyboard.insert(button_plan).insert(button_plans).insert(button_help)
 
 # Inline buttons for choosing plans
-first_plan = InlineKeyboardButton("План №1", callback_data="first_plan")
-second_plan = InlineKeyboardButton("План №2", callback_data="second_plan")
-third_plan = InlineKeyboardButton("План №3", callback_data="third_plan")
+first_plan = KeyboardButton("/plan 1")
+second_plan = KeyboardButton("/plan 2")
+third_plan = KeyboardButton("/plan 3")
 
 # Create dictionary of plans
 plans = {
@@ -21,7 +21,7 @@ plans = {
 }
 
 # Adding inline buttons of plans after message
-inline_buttons_of_plans = InlineKeyboardMarkup().insert(first_plan).insert(second_plan).insert(third_plan)
+reply_buttons_of_plans = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True).insert(first_plan).insert(second_plan).insert(third_plan)
 
 # Buttons for choosing day of the week
 monday = InlineKeyboardButton("Понедельник", callback_data="monday")
@@ -32,6 +32,7 @@ friday = InlineKeyboardButton("Пятница", callback_data="friday")
 saturday = InlineKeyboardButton("Суббота", callback_data="saturday")
 sunday = InlineKeyboardButton("Воскресенье", callback_data="sunday")
 stop_choosing = InlineKeyboardButton("Закончить выбор", callback_data="stop")
+
 
 # Adding inline buttons of days of the week after choosing
 inline_buttons_of_days = InlineKeyboardMarkup().insert(monday).insert(tuesday).insert(wednesday).insert(thursday).insert(friday).insert(saturday).insert(sunday).row(stop_choosing)

@@ -8,27 +8,12 @@ from aiogram.types import ParseMode, CallbackQuery
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from messages import MESSAGES
-
-from keyboard import *
-
+import keyboard as kb
 from config import *
+from states import StatesOfPlan
 
 bot = Bot(token=TOKEN, proxy=PROXY_URL, proxy_auth=PROXY_AUTH)
 dp = Dispatcher(bot, storage=MemoryStorage())
-
-
-@dp.callback_query_handler(lambda call: call.data == "stop")
-async def process_callback_stop(callback_query: types.CallbackQuery):
-    await bot.send_message(callback_query.from_user.id, MESSAGES['stop'], parse_mode=ParseMode.MARKDOWN)
-
-
-@dp.callback_query_handler(lambda call: True)
-async def process_callback_plans(callback_query: types.CallbackQuery):
-    for index, plan in enumerate(plans, 1):
-        if callback_query.data == plan:
-            current_state = dp.current_state(user=callback_query.from_user.id)
-            await bot.answer_callback_query(callback_query.id)
-            await bot.send_message(callback_query.from_user.id, MESSAGES['change_state_plan'].format(number=index, plan=plans[plan]), parse_mode=ParseMode.MARKDOWN, reply_markup=inline_buttons_of_days)
 
 
 @dp.message_handler(commands=['start'])
@@ -48,16 +33,42 @@ async def process_facts_command(message: types.Message):
 
 @dp.message_handler(commands=['plans'])
 async def process_plans_command(message: types.Message):
-    await message.reply(MESSAGES['plans'], parse_mode=ParseMode.MARKDOWN, reply_markup=inline_buttons_of_plans, reply=False)
+    await message.reply(MESSAGES['plans'], parse_mode=ParseMode.MARKDOWN, reply_markup=kb.reply_buttons_of_plans, reply=False)
 
 
+@dp.message_handler(state='*', commands=['plan'])
+async def process_setstate_command(message: types.Message):
+    argument = message.get_args()
+    state = dp.current_state(user=message.from_user.id)
+
+    if not argument:
+        await state.reset_state()
+        return await message.reply("Ошибка, не был передан номер плана тренировки", reply=False)
+
+    if (not argument.isdigit()) or (int(argument) < 1 or int(argument) > 3):
+        return await message.reply(MESSAGES['invalid'], parse_mode=ParseMode.MARKDOWN, reply=False)
+
+    await state.set_state(StatesOfPlan.all()[int(argument)-1])
+    await message.reply(MESSAGES['change_state_plan'].format(number=argument, plan=str(kb.plans[await state.get_state()])), parse_mode=ParseMode.MARKDOWN, reply=False)
 
 
+@dp.message_handler(state='*', commands=['current_plan'])
+async def process_current_command(message: types.Message):
+    state = dp.current_state(user=message.from_user.id)
+    if not await state.get_state():
+        return await message.reply("Вы пока не выбрали ни одного плана тренировки", reply=False)
+    await message.reply(MESSAGES['current_plan'].format(current_plan=kb.plans[await state.get_state()]), parse_mode=ParseMode.MARKDOWN, reply=False)
 
-@dp.message_handler()
-async def process_invalid_command(message: types.Message):
-    await message.reply(MESSAGES['invalid'], parse_mode=ParseMode.MARKDOWN,reply=False)
+
+@dp.message_handler(content_types=types.ContentTypes.ANY)
+async def other_messages(message: types.Message):
+    await bot.send_message(message.from_user.id, MESSAGES['invalid'], parse_mode=ParseMode.MARKDOWN)
+
+
+async def shutdown(dispatcher: Dispatcher):
+    await dispatcher.storage.close()
+    await dispatcher.storage.wait_closed()
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp)
+    executor.start_polling(dp, on_shutdown=shutdown)
