@@ -1,6 +1,6 @@
 from aiogram.utils.helper import Helper, HelperMode, ListItem
 
-class StatesOfPlan(Helper):
+class StateOfPlan(Helper):
     mode = HelperMode.snake_case
 
     FIRST_PLAN = ListItem()
