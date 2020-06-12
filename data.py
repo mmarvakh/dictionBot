@@ -1,20 +1,48 @@
-# -*- coding: utf-8 -*-
+from sqlalchemy import *
+from sqlalchemy.ext.declarative import declarative_base
 
-from vedis import Vedis
-from config import DATA_BASE
-from states import StateOfPlan
+engine = create_engine("mysql+pymysql://root:M8112001m@localhost:3306/diction_bot")
 
-def get_current_state(user_id):
-    with Vedis(DATA_BASE) as db:
-        try:
-            return db[user_id].decode()
-        except KeyError:
-            return StateOfPlan.START.value
+db = declarative_base()
 
-def set_state(user_id, value):
-    with Vedis(DATA_BASE) as db:
-        try:
-            db[user_id] = value
-            return True
-        except:
-            return False
+
+class Users(db):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_login = Column(String(length=64), nullable=False, index=True, unique=True)
+    password_hash = Column(String(length=128), nullable=True)
+
+class Plan_1(db):
+    __tablename__ = 'plan_1'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String(length=100), nullable=False)
+    exercise_day = Column(Integer, nullable=False)
+    exercise_text = Column(Text, nullable=False)
+    plan = Column(String(length=30), nullable=False)
+
+class Plan_2(db):
+    __tablename__ = 'plan_2'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String(length=100), nullable=False)
+    exercise_day = Column(Integer, nullable=False)
+    exercise_text = Column(Text, nullable=False)
+    plan = Column(String(length=30), nullable=False)
+
+class Plan_3(db):
+    __tablename__ = 'plan_3'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String(length=100), nullable=False)
+    exercise_day = Column(Integer, nullable=False)
+    exercise_text = Column(Text, nullable=False)
+    plan = Column(String(length=30), nullable=False)
+
+class AboutDiction(db):
+    __tablename__ = 'about_diction'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String(length=100), nullable=False)
+    text = Column(Text, nullable=False)
