@@ -1,7 +1,8 @@
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
+from config import ENGINE
 
-engine = create_engine("mysql+pymysql://root:M8112001m@localhost:3306/diction_bot")
+engine = ENGINE
 
 db = declarative_base()
 
