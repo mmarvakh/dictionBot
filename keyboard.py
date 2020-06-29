@@ -1,13 +1,5 @@
 from aiogram.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
-#ReplyKeyboard under main keyboard for quick typing commands /start and /help
-button_plan = KeyboardButton("/current_plan")
-button_plans = KeyboardButton("/plan")
-button_help = KeyboardButton("/help")
-
-reply_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-reply_keyboard.insert(button_plan).insert(button_plans).insert(button_help)
-
 # Inline buttons for choosing plans
 first_plan = InlineKeyboardButton("План №1", callback_data="plan_1")
 second_plan = InlineKeyboardButton("План №2", callback_data="plan_2")
@@ -15,22 +7,22 @@ third_plan = InlineKeyboardButton("План №3", callback_data="plan_3")
 
 # Create dictionary of plans
 plans = {
-    "first_plan" : "\"Укрепление мышц лица и преодоление неразвитости звучания (Базовый уровень, 7 дней)\"",
-    "second_plan" : "\"Улучшение звучания вашего голоса (Средний уровень, 5 дней)\"",
-    "third_plan" : "\"Самые сложные звукосочетания (Продвинутый уровень, 4 дня)\""
+    "1" : "\"Укрепление мышц лица и преодоление неразвитости звучания (Базовый уровень, 7 дней)\"",
+    "2" : "\"Улучшение звучания вашего голоса (Средний уровень, 5 дней)\"",
+    "3" : "\"Самые сложные звукосочетания (Продвинутый уровень, 4 дня)\""
 }
 
 # Adding inline buttons of plans after message
 reply_buttons_of_plans = InlineKeyboardMarkup(resize_keyboard=True).insert(first_plan).insert(second_plan).insert(third_plan)
 
 # Buttons for choosing day of the week
-monday = InlineKeyboardButton("[Пн]", callback_data="day_0")
-tuesday = InlineKeyboardButton("[Вт]", callback_data="day_1")
-wednesday = InlineKeyboardButton("[Ср]", callback_data="day_2")
-thursday = InlineKeyboardButton("[Чт]", callback_data="day_3")
-friday = InlineKeyboardButton("[Пт]", callback_data="day_4")
-saturday = InlineKeyboardButton("[Сб]", callback_data="day_5")
-sunday = InlineKeyboardButton("[Вс]", callback_data="day_6")
+monday = InlineKeyboardButton("Пн", callback_data="day_0")
+tuesday = InlineKeyboardButton("Вт", callback_data="day_1")
+wednesday = InlineKeyboardButton("Ср", callback_data="day_2")
+thursday = InlineKeyboardButton("Чт", callback_data="day_3")
+friday = InlineKeyboardButton("Пт", callback_data="day_4")
+saturday = InlineKeyboardButton("Сб", callback_data="day_5")
+sunday = InlineKeyboardButton("Вс", callback_data="day_6")
 stop_choosing = InlineKeyboardButton("Закончить выбор", callback_data="day_stop")
 
 
@@ -59,3 +51,14 @@ twentyOne_clock = InlineKeyboardButton("21:00", callback_data="time_21:00")
 inline_buttons_of_time = InlineKeyboardMarkup(row_width=4).insert(six_clock).insert(seven_clock).insert(eight_clock).insert(nine_clock).insert(ten_clock).insert(eleven_clock).insert(twelve_clock).\
                                                 insert(thirteen_clock).insert(fourteen_clock).insert(fifteen_clock).insert(sixteen_clock).insert(seventeen_clock).insert(eighteen_clock).insert(nineteen_clock)\
                                                 .insert(twenty_clock).insert(twentyOne_clock)
+
+help_btn = InlineKeyboardButton("Начать работу", callback_data='help')
+
+inline_start_btn = InlineKeyboardMarkup(resize_keyboard=True).row(help_btn)
+
+plans_btn = InlineKeyboardButton("Доступные планы", callback_data='plans')
+current_plan_btn = InlineKeyboardButton("Выбранный план", callback_data='current_plan')
+days_btn = InlineKeyboardButton("Выбранные дни", callback_data='days')
+change_btn = InlineKeyboardButton("Сменить план", callback_data='change_plan')
+
+inline_info = InlineKeyboardMarkup(row_width=2).insert(plans_btn).insert(current_plan_btn).insert(days_btn).insert(change_btn)
